@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en">
+<html lang="en" class="h-full">
   <head>
     <meta charset="UTF-8" />
     <link rel="icon" type="image/png" href="/favicon-96x96.png" sizes="96x96" />
@@ -9,10 +9,308 @@
     <meta name="apple-mobile-web-app-title" content="BMI Calculator" />
     <link rel="manifest" href="/site.webmanifest" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>BMI Calculator</title>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
+    />
+    <meta
+      name="description"
+      content="A modern dark-themed BMI Calculator. Enter your gender, age, height, and weight to instantly calculate your Body Mass Index."
+    />
+    <title>BMI Calculator — Know Your Health Index</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
   </head>
-  <body>
-    <div id="app"></div>
+
+  <!-- h-full on html+body, flex-col = navbar / flex-1 main / footer fills screen exactly -->
+  <body
+    class="h-full bg-[#0d0800] text-slate-100 overflow-hidden flex flex-col"
+  >
+    <!-- ── Background orbs (orange/amber themed) ── -->
+    <div
+      aria-hidden="true"
+      class="orb-1 fixed -top-28 -left-20 w-[420px] h-[420px] rounded-full bg-orange-600 opacity-[0.09] blur-[90px] pointer-events-none z-0"
+    ></div>
+    <div
+      aria-hidden="true"
+      class="orb-2 fixed -bottom-20 -right-16 w-[340px] h-[340px] rounded-full bg-amber-500 opacity-[0.07] blur-[80px] pointer-events-none z-0"
+    ></div>
+    <div
+      aria-hidden="true"
+      class="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] rounded-full bg-orange-950 opacity-[0.12] blur-[110px] pointer-events-none z-0"
+    ></div>
+
+    <!-- ══════════════════ NAVBAR ══════════════════ -->
+    <nav
+      class="glass-bar shrink-0 sticky top-0 z-50 w-full border-b border-orange-500/20"
+    >
+      <div
+        class="mx-auto flex h-14 max-w-5xl items-center justify-between px-4 sm:px-6"
+      >
+        <!-- Logo + Brand -->
+        <div class="flex items-center gap-2.5">
+          <!-- Logo just shown as plain image — it's already a circle -->
+          <div
+            class="h-9 w-9 shrink-0 rounded-xl overflow-hidden shadow-lg shadow-orange-500/25"
+          >
+            <img
+              src="/src/assets/logo.png"
+              alt="BMI Calculator Logo"
+              class="h-full w-full object-cover"
+            />
+          </div>
+          <span
+            class="text-sm font-bold tracking-tight text-slate-100 sm:text-base"
+          >
+            BMI
+            <span
+              class="bg-linear-to-r from-orange-400 to-amber-400 bg-clip-text text-transparent"
+              >Calculator</span
+            >
+          </span>
+        </div>
+
+        <!-- See More Projects -->
+        <a
+          href="https://hritik-sharma-personal-portfolio.vercel.app/"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="group flex items-center gap-1.5 rounded-xl border border-orange-500/30 bg-orange-500/10 px-3 py-1.5 text-xs font-semibold text-orange-300 transition-all duration-200 hover:border-orange-400/60 hover:bg-orange-500/20 hover:text-orange-200 hover:-translate-y-0.5 sm:px-4 sm:text-sm"
+        >
+          <i
+            class="fa-solid fa-globe text-orange-400 group-hover:text-orange-300 transition-colors"
+            aria-hidden="true"
+          ></i>
+          <span class="hidden xs:inline sm:inline">See More Projects</span>
+          <span class="sm:hidden">Portfolio</span>
+          <i
+            class="fa-solid fa-arrow-up-right-from-square text-[0.6rem] opacity-60"
+            aria-hidden="true"
+          ></i>
+        </a>
+      </div>
+    </nav>
+
+    <!-- ══════════════════ MAIN ══════════════════ -->
+    <!-- overflow-y-auto lets card scroll on very short screens; otherwise centered -->
+    <main
+      class="relative z-10 flex flex-1 items-center justify-center overflow-y-auto px-4 py-3"
+    >
+      <div id="app" class="w-full max-w-[420px]">
+        <!-- ── Glass Card ── -->
+        <div
+          class="relative w-full rounded-2xl border border-orange-500/20 bg-[rgba(18,10,2,0.75)] backdrop-blur-2xl shadow-[0_24px_60px_rgba(0,0,0,0.65),0_0_0_1px_rgba(255,255,255,0.04)_inset,0_0_70px_rgba(249,115,22,0.07)] px-5 py-5 sm:px-7 sm:py-6"
+        >
+          <!-- Top shimmer line -->
+          <div
+            aria-hidden="true"
+            class="absolute top-0 left-1/2 -translate-x-1/2 w-3/5 h-px bg-linear-to-r from-transparent via-orange-500/60 to-transparent rounded-full"
+          ></div>
+
+          <!-- ── Card Header ── -->
+          <header class="mb-4 text-center">
+            <h1
+              class="text-lg font-extrabold tracking-tight text-slate-100 sm:text-xl"
+            >
+              BMI Calculator
+            </h1>
+            <p class="text-[0.7rem] text-slate-500 mt-0.5">
+              Know your Body Mass Index instantly
+            </p>
+          </header>
+
+          <!-- ── Form ── -->
+          <form id="bmiForm" novalidate class="space-y-3">
+            <!-- Gender -->
+            <div>
+              <label
+                for="gender"
+                class="mb-1 flex items-center gap-1.5 text-[0.65rem] font-semibold uppercase tracking-widest text-slate-400"
+              >
+                <i
+                  class="fa-solid fa-venus-mars text-orange-400"
+                  aria-hidden="true"
+                ></i>
+                Gender
+              </label>
+              <select
+                name="gender"
+                id="gender"
+                class="custom-select w-full rounded-xl border border-orange-500/20 bg-white/4 px-3.5 py-2 text-slate-100 text-sm font-medium outline-none transition-all duration-200 focus:border-orange-500 focus:bg-orange-500/7 focus:ring-2 focus:ring-orange-500/20 cursor-pointer"
+                required
+              >
+                <option value="male" class="bg-[#1a0d00] text-slate-100">
+                  Male
+                </option>
+                <option value="female" class="bg-[#1a0d00] text-slate-100">
+                  Female
+                </option>
+              </select>
+            </div>
+
+            <!-- Age -->
+            <div>
+              <label
+                for="age"
+                class="mb-1 flex items-center gap-1.5 text-[0.65rem] font-semibold uppercase tracking-widest text-slate-400"
+              >
+                <i
+                  class="fa-solid fa-cake-candles text-orange-400"
+                  aria-hidden="true"
+                ></i>
+                Age
+              </label>
+              <div class="relative">
+                <input
+                  type="number"
+                  name="age"
+                  id="age"
+                  placeholder="e.g. 25"
+                  min="1"
+                  max="120"
+                  required
+                  class="w-full rounded-xl border border-orange-500/20 bg-white/4 px-3.5 py-2 pr-14 text-slate-100 text-sm font-medium placeholder-slate-600 outline-none transition-all duration-200 focus:border-orange-500 focus:bg-orange-500/7 focus:ring-2 focus:ring-orange-500/20"
+                />
+                <span
+                  class="pointer-events-none absolute right-3.5 top-1/2 -translate-y-1/2 text-[0.65rem] font-bold text-orange-400"
+                  >yrs</span
+                >
+              </div>
+            </div>
+
+            <!-- Height -->
+            <div>
+              <label
+                class="mb-1 flex items-center gap-1.5 text-[0.65rem] font-semibold uppercase tracking-widest text-slate-400"
+              >
+                <i
+                  class="fa-solid fa-ruler-vertical text-orange-400"
+                  aria-hidden="true"
+                ></i>
+                Height
+              </label>
+              <div class="grid grid-cols-2 gap-2.5">
+                <div class="relative">
+                  <input
+                    type="number"
+                    name="height-feet"
+                    id="heightFeet"
+                    placeholder="Feet"
+                    min="0"
+                    max="9"
+                    required
+                    class="w-full rounded-xl border border-orange-500/20 bg-white/4 px-3.5 py-2 pr-10 text-slate-100 text-sm font-medium placeholder-slate-600 outline-none transition-all duration-200 focus:border-orange-500 focus:bg-orange-500/7 focus:ring-2 focus:ring-orange-500/20"
+                  />
+                  <span
+                    class="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-[0.65rem] font-bold text-orange-400"
+                    >ft</span
+                  >
+                </div>
+                <div class="relative">
+                  <input
+                    type="number"
+                    name="height-inch"
+                    id="heightInches"
+                    placeholder="Inches"
+                    min="0"
+                    max="11"
+                    required
+                    class="w-full rounded-xl border border-orange-500/20 bg-white/4 px-3.5 py-2 pr-10 text-slate-100 text-sm font-medium placeholder-slate-600 outline-none transition-all duration-200 focus:border-orange-500 focus:bg-orange-500/7 focus:ring-2 focus:ring-orange-500/20"
+                  />
+                  <span
+                    class="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-[0.65rem] font-bold text-orange-400"
+                    >in</span
+                  >
+                </div>
+              </div>
+            </div>
+
+            <!-- Weight -->
+            <div>
+              <label
+                for="weight"
+                class="mb-1 flex items-center gap-1.5 text-[0.65rem] font-semibold uppercase tracking-widest text-slate-400"
+              >
+                <i
+                  class="fa-solid fa-dumbbell text-orange-400"
+                  aria-hidden="true"
+                ></i>
+                Weight
+              </label>
+              <div class="relative">
+                <input
+                  type="number"
+                  name="weight"
+                  id="weight"
+                  placeholder="Enter weight"
+                  min="1"
+                  required
+                  class="w-full rounded-xl border border-orange-500/20 bg-white/4 px-3.5 py-2 pr-10 text-slate-100 text-sm font-medium placeholder-slate-600 outline-none transition-all duration-200 focus:border-orange-500 focus:bg-orange-500/7 focus:ring-2 focus:ring-orange-500/20"
+                />
+                <span
+                  class="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-[0.65rem] font-bold text-orange-400"
+                  >kg</span
+                >
+              </div>
+            </div>
+
+            <!-- Divider -->
+            <div class="border-t border-orange-500/10"></div>
+
+            <!-- Submit -->
+            <button
+              type="submit"
+              id="calculateBtn"
+              class="group relative w-full overflow-hidden rounded-xl bg-linear-to-r from-orange-500 to-amber-500 px-5 py-2.5 text-sm font-bold text-white shadow-lg shadow-orange-500/30 transition-all duration-200 hover:-translate-y-0.5 hover:shadow-xl hover:shadow-orange-500/40 hover:brightness-110 active:translate-y-0 active:shadow-md"
+            >
+              <span
+                aria-hidden="true"
+                class="absolute inset-0 -translate-x-full bg-linear-to-r from-transparent via-white/20 to-transparent transition-transform duration-500 group-hover:translate-x-full"
+              ></span>
+              <span class="relative flex items-center justify-center gap-2">
+                <i class="fa-solid fa-calculator" aria-hidden="true"></i>
+                Calculate BMI
+              </span>
+            </button>
+          </form>
+
+          <!-- ── Result Panel ── -->
+          <section
+            id="result"
+            role="region"
+            aria-live="polite"
+            aria-label="BMI Result"
+            class="result-enter mt-3.5 hidden rounded-2xl border border-orange-500/20 bg-orange-500/6 p-3.5"
+          >
+            <!-- adding result via Javascript -->
+          </section>
+        </div>
+        <!-- /glass card -->
+      </div>
+      <!-- /app -->
+    </main>
+
+    <!-- ══════════════════ FOOTER ══════════════════ -->
+    <footer
+      class="glass-bar shrink-0 w-full border-t border-orange-500/15 z-50"
+    >
+      <div class="mx-auto flex h-11 max-w-5xl items-center justify-center px-4">
+        <p class="text-center text-xs text-slate-500">
+          Made with
+          <i
+            class="heart-beat fa-solid fa-heart mx-1 text-rose-500"
+            aria-hidden="true"
+          ></i>
+          by
+          <span class="font-semibold text-slate-300 ml-0.5">Hritik Sharma</span>
+        </p>
+      </div>
+    </footer>
+
     <script type="module" src="/src/main.js"></script>
   </body>
 </html>
